@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الشركة | Company Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo">🏢</div>
+            <h1>نظام إدارة الحضور</h1>
+            <p style="color: #94a3b8; margin-bottom: 2rem">يرجى تسجيل الدخول للمتابعة</p>
+
+            <!-- Tabs -->
+            <div style="display: flex; margin-bottom: 20px; background: #0f172a; padding: 4px; border-radius: 10px;">
+                <button id="tab-employee" class="active" style="flex:1; border-radius: 8px;" onclick="switchTab('employee')">موظف</button>
+                <button id="tab-admin" class="secondary" style="flex:1; border:none; margin:0;" onclick="switchTab('admin')">مدير</button>
+            </div>
+
+            <form id="login-form">
+                <div id="admin-input" class="hidden">
+                    <input type="password" id="admin-password" placeholder="كلمة مرور المدير (Pass)" >
+                </div>
+                
+                <div id="employee-input">
+                    <!-- Dropdown will be populated from DB -->
+                    <select id="employee-select">
+                        <option value="" disabled selected>اختر اسمك من القائمة...</option>
+                        <option value="demo">عرض تجريبي (Demo)</option>
+                    </select>
+                </div>
+
+                <button type="submit">دخول 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <style>
+        .hidden { display: none; }
+    </style>
+    <script>
+        function switchTab(role) {
+            const adminInput = document.getElementById('admin-input');
+            const empInput = document.getElementById('employee-input'); // Fixed ID
+            const btnAdmin = document.getElementById('tab-admin');
+            const btnEmp = document.getElementById('tab-employee');
+
+            if (role === 'admin') {
+                adminInput.classList.remove('hidden');
+                empInput.classList.add('hidden');
+                btnAdmin.className = '';
+                btnEmp.className = 'secondary';
+                btnEmp.style.background = 'transparent';
+                btnAdmin.style.background = '#3b82f6';
+            } else {
+                adminInput.classList.add('hidden');
+                empInput.classList.remove('hidden');
+                btnAdmin.className = 'secondary';
+                btnAdmin.style.background = 'transparent';
+                btnEmp.className = '';
+                btnEmp.style.background = '#3b82f6';
+            }
+        }
+    </script>
+</body>
+</html>

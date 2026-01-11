@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحتي | My Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo" style="font-size: 1.5rem; margin:0">👤 ملفي</div>
+        <div class="user-info">
+            <span id="emp-name" style="margin-left: 10px">...</span>
+            <button onclick="logout()" class="secondary"
+                style="margin:0; padding: 8px 15px; font-size: 0.9rem">خروج</button>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <!-- Personal Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="days-present" style="color: var(--success)">0</div>
+                <div class="stat-label">أيام الحضور</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="days-absent" style="color: var(--danger)">0</div>
+                <div class="stat-label">أيام الغياب</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="vacation-balance" style="color: var(--warning)">0</div>
+                <div class="stat-label">دقائق تأخير</div>
+            </div>
+        </div>
+
+        <h3>سجل الحضور الشهري</h3>
+        <div class="card-list" id="history-list">
+            <!-- History Items -->
+        </div>
+    </div>
+
+    <script type="module" src="js/employee.js"></script>
+    <script>
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

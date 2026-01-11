@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المدير | Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo" style="font-size: 1.5rem; margin:0">🏢 الإدارة</div>
+        <div class="user-info">
+            <button onclick="logout()" class="secondary" style="margin:0; padding: 8px 15px; font-size: 0.9rem">تسجيل
+                خروج</button>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="total-employees">0</div>
+                <div class="stat-label">الموظفين</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="present-today" style="color: var(--success)">0</div>
+                <div class="stat-label">حضور اليوم</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="absent-today" style="color: var(--danger)">0</div>
+                <div class="stat-label">غياب اليوم</div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-bar">
+            <h2>سجل الحضور اليومي (<span id="today-date"></span>)</h2>
+            <button onclick="openAddModal()" style="width: auto;">+ إضافة موظف</button>
+        </div>
+
+        <!-- Employee List -->
+        <div id="employee-list" class="card-list">
+            <!-- Cards injected via JS -->
+            <div style="text-align: center; color: #666; padding: 20px;">جارٍ تحميل البيانات...</div>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="add-modal" class="modal hidden">
+        <div class="auth-card" style="text-align: right;">
+            <h3>إضافة موظف جديد</h3>
+            <form id="add-employee-form">
+                <label>الاسم بالكامل</label>
+                <input type="text" id="new-name" required>
+
+                <label>الوظيفة</label>
+                <input type="text" id="new-job" required>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="closeAddModal()" class="secondary">إلغاء</button>
+                    <button type="submit">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+    <script>
+        function logout() {
+            window.location.href = 'index.html';
+        }
+        function openAddModal() {
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+        function closeAddModal() {
+            document.getElementById('add-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>
