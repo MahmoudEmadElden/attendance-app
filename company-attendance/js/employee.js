@@ -17,9 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Stats
     const presentCount = history.filter(h => h.status === 'present').length;
     const absentCount = history.filter(h => h.status === 'absent').length;
+    // Calculate total overtime
+    const totalOvertime = history.reduce((sum, h) => sum + (parseInt(h.overtime) || 0), 0);
 
     document.getElementById('days-present').textContent = presentCount;
     document.getElementById('days-absent').textContent = absentCount;
+    document.getElementById('vacation-balance').textContent = totalOvertime + " س"; // Changed generic label to Overtime Hours
+    document.querySelector('.stat-label:last-child').textContent = "ساعات إضافية"; // Update label dynamically
 
     // 3. Render List
     listContainer.innerHTML = '';
@@ -41,13 +45,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         const info = statusMap[rec.status] || { text: rec.status, color: '#fff' };
 
         const card = document.createElement('div');
-        card.className = 'employee-card'; // Reuse styled card
-        card.style.justifyContent = 'flex-start';
+        card.className = 'employee-card';
+        card.style.justifyContent = 'space-between'; // Changed layout
         card.innerHTML = `
-            <div style="background: ${info.color}; width: 10px; height: 10px; border-radius: 50%; margin-left: 15px;"></div>
-            <div class="emp-details">
-                <h4 style="color:white">${rec.date}</h4>
-                <p>${info.text}</p>
+            <div style="display:flex; align-items:center;">
+                <div style="background: ${info.color}; width: 10px; height: 10px; border-radius: 50%; margin-left: 15px;"></div>
+                <div class="emp-details">
+                    <h4 style="color:white">${rec.date}</h4>
+                    <p>${info.text}</p>
+                </div>
+            </div>
+            
+            <div style="text-align: left; font-size: 0.9rem; color: #ccc;">
+                ${rec.overtime > 0 ? `<div style="color: var(--warning)">+${rec.overtime}h إضافي</div>` : ''}
+                ${rec.notes ? `<div style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📝 ${rec.notes}</div>` : ''}
             </div>
         `;
         listContainer.appendChild(card);
