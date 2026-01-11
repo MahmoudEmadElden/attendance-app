@@ -13,7 +13,9 @@
     <div class="container">
         <header>
             <h1>تسجيل الحضور اليومي</h1>
-            <p id="current-date"></p>
+            <div class="date-container">
+                <input type="date" id="attendance-date" class="date-input">
+            </div>
         </header>
 
         <form id="attendance-form">
@@ -53,9 +55,38 @@
 
         <div id="message" class="message hidden"></div>
 
-        <footer>
-            <a href="/api/download" class="download-link">📥 تحميل ملف الإكسيل</a>
-        </footer>
+        <!-- History Section -->
+        <div class="history-section">
+            <h2>سجل الحضور</h2>
+            <div class="table-wrapper">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>إضافي</th>
+                            <th>ملاحظات</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added here JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div class="tools-section">
+            <h3>أدوات</h3>
+            <div class="tools-grid">
+                <label class="file-upload">
+                    <span>📤 استيراد ملف قديم (CSV)</span>
+                    <input type="file" id="csv-upload" accept=".csv">
+                </label>
+                <button class="download-link">📥 تحميل الكل (Excel)</button>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
