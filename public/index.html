@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الحضور | Attendance</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>تسجيل الحضور اليومي</h1>
+            <p id="current-date"></p>
+        </header>
+
+        <form id="attendance-form">
+            <!-- Status Section -->
+            <div class="form-group status-group">
+                <label>الحالة:</label>
+                <div class="radio-options">
+                    <label class="radio-card">
+                        <input type="radio" name="status" value="حضور" checked>
+                        <span class="card-content">✅ حضور</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="status" value="غياب">
+                        <span class="card-content">❌ غياب</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Overtime Section -->
+            <div class="form-group">
+                <label for="overtime">ساعات إضافية:</label>
+                <input type="number" id="overtime" name="overtime" placeholder="0" min="0">
+            </div>
+
+            <!-- Notes Section -->
+            <div class="form-group">
+                <label for="notes">ملاحظات:</label>
+                <textarea id="notes" name="notes" placeholder="أي ملاحظات إضافية..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submit-btn">
+                <span class="btn-text">تسجيل</span>
+                <span class="loader"></span>
+            </button>
+        </form>
+
+        <div id="message" class="message hidden"></div>
+
+        <footer>
+            <a href="/api/download" class="download-link">📥 تحميل ملف الإكسيل</a>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
