@@ -56,34 +56,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Handle CSV Import
+    // 3. Handle CSV/Excel Import
     csvInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = (event) => {
-            const csvData = event.target.result;
-            // Use SheetJS to parse CSV easily
-            const workbook = XLSX.read(csvData, { type: 'string' });
+            const data = event.target.result;
+            // Read as ArrayBuffer for full Excel support
+            const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
             if (jsonData.length > 0) {
-                // Map old CSV fields to new format if needed
-                // Assuming old CSV has columns like: Date, Status, Overtime Hours, Notes
                 let importedCount = 0;
 
                 jsonData.forEach(row => {
-                    // Try to map keys (case insensitive search)
                     const keys = Object.keys(row);
-                    const getDate = k => row[keys.find(key => key.toLowerCase().includes('date'))];
-                    const getStatus = k => row[keys.find(key => key.toLowerCase().includes('status'))] || row[keys.find(key => key.includes('الحالة'))];
-                    const getOvertime = k => row[keys.find(key => key.toLowerCase().includes('overtime'))] || row[keys.find(key => key.includes('إضافي'))];
-                    const getNotes = k => row[keys.find(key => key.toLowerCase().includes('notes'))] || row[keys.find(key => key.includes('ملاحظات'))];
+                    // Improved mapping for both English and Arabic Export headers
+                    const getDate = k => row[keys.find(key => key.toLowerCase().includes('date') || key.includes('التاريخ'))];
+                    const getStatus = k => row[keys.find(key => key.toLowerCase().includes('status') || key.includes('الحالة'))];
+                    const getOvertime = k => row[keys.find(key => key.toLowerCase().includes('overtime') || key.includes('إضافي'))];
+                    const getNotes = k => row[keys.find(key => key.toLowerCase().includes('notes') || key.includes('ملاحظات'))];
 
                     const record = {
-                        id: Date.now() + Math.random(), // Unique ID simulation
+                        id: Date.now() + Math.random(),
                         date: getDate() || new Date().toISOString().split('T')[0],
                         time: "Imported",
                         status: getStatus() || "حضور",
@@ -98,8 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadHistoryTable();
             }
         };
-        reader.readAsText(file);
-        // Clear input so same file can be selected again
+        reader.readAsArrayBuffer(file); // Important: Read as ArrayBuffer
         e.target.value = '';
     });
 
