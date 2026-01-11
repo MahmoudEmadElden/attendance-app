@@ -36,13 +36,31 @@
         </div>
 
         <!-- Actions -->
-        <div class="action-bar">
-            <h2>سجل الحضور اليومي (<span id="today-date"></span>)</h2>
-            <button onclick="openAddModal()" style="width: auto;">+ إضافة موظف</button>
+        <div class="action-bar"
+            style="background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border);">
+            <div style="flex: 1; min-width: 250px;">
+                <input type="text" id="search-input" placeholder="🔍 ابحث عن موظف..." style="margin: 0;">
+            </div>
+
+            <div class="bulk-actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="markSelected('present')" style="width: auto; background: var(--success);">تم اختيارهم:
+                    ✅ حضور</button>
+                <button onclick="markSelected('absent')" style="width: auto; background: var(--danger);">تم اختيارهم: ❌
+                    غياب</button>
+            </div>
+
+            <button onclick="openAddModal()" style="width: auto;">+ موظف جديد</button>
+        </div>
+
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 5px; color: var(--text-muted);">
+            <input type="checkbox" id="select-all" style="width: auto; margin: 0;">
+            <label for="select-all">تحديد الكل</label>
+            <span style="margin-right: 15px;">| التاريخ: <span id="today-date"
+                    style="color:white; font-weight:bold;"></span></span>
         </div>
 
         <!-- Employee List -->
-        <div id="employee-list" class="card-list">
+        <div id="employee-list" class="card-list" style="margin-top: 15px;">
             <!-- Cards injected via JS -->
             <div style="text-align: center; color: #666; padding: 20px;">جارٍ تحميل البيانات...</div>
         </div>
@@ -64,6 +82,22 @@
                     <button type="submit">حفظ</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- History Edit Modal -->
+    <div id="history-modal" class="modal hidden">
+        <div class="auth-card" style="text-align: right; max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="history-emp-name">سجل الموظف</h3>
+                <button onclick="closeHistoryModal()" class="secondary" style="width: auto; padding: 5px 10px;">✕
+                    إغلاق</button>
+            </div>
+
+            <div id="history-content"
+                style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                <!-- History Items injected here -->
+            </div>
         </div>
     </div>
 
