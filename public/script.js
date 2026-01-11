@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Display Current Date
     const curDate = new Date().toLocaleDateString('ar-EG', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
@@ -8,44 +9,71 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.getElementById('message');
     const submitBtn = document.getElementById('submit-btn');
 
-    form.addEventListener('submit', async (e) => {
+    // 2. Handle Form Submission (Save to LocalStorage)
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // UI Loading State
         submitBtn.disabled = true;
         submitBtn.querySelector('.btn-text').textContent = 'جارٍ الحفظ...';
 
         const formData = new FormData(form);
-        const data = {
-            date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+        const record = {
+            id: Date.now(), // Unique ID
+            date: new Date().toLocaleDateString('en-GB'), // DD/MM/YYYY
+            time: new Date().toLocaleTimeString('en-US'),
             status: formData.get('status'),
-            overtime: formData.get('overtime'),
-            notes: formData.get('notes')
+            overtime: formData.get('overtime') || "0",
+            notes: formData.get('notes') || ""
         };
 
         try {
-            const response = await fetch('/api/attendance', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+            // Get existing data
+            let attendanceData = JSON.parse(localStorage.getItem('attendance_data') || "[]");
+            attendanceData.push(record);
 
-            const result = await response.json();
+            // Save back
+            localStorage.setItem('attendance_data', JSON.stringify(attendanceData));
 
-            if (result.success) {
-                showMessage(result.message, 'success');
-                form.reset();
-            } else {
-                showMessage('حدث خطأ: ' + result.message, 'error');
-            }
+            showMessage('✅ تم تسجيل الحضور محلياً بنجاح!', 'success');
+            form.reset();
         } catch (error) {
-            showMessage('فشل الاتصال بالسيرفر', 'error');
+            console.error(error);
+            showMessage('❌ حدث خطأ أثناء الحفظ', 'error');
         } finally {
             submitBtn.disabled = false;
             submitBtn.querySelector('.btn-text').textContent = 'تسجيل';
         }
+    });
+
+    // 3. Handle Excel Download (Generate in Browser)
+    document.querySelector('.download-link').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const attendanceData = JSON.parse(localStorage.getItem('attendance_data') || "[]");
+
+        if (attendanceData.length === 0) {
+            showMessage('⚠️ لا توجد بيانات للتحميل', 'error');
+            return;
+        }
+
+        // Prepare data for Excel (Rename headers)
+        const excelRows = attendanceData.map(item => ({
+            "التاريخ": item.date,
+            "الوقت": item.time,
+            "الحالة": item.status,
+            "ساعات إضافية": item.overtime,
+            "ملاحظات": item.notes
+        }));
+
+        // Create Worksheet
+        const ws = XLSX.utils.json_to_sheet(excelRows, { rtl: true });
+
+        // Create Workbook
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+
+        // Download File
+        XLSX.writeFile(wb, "Attendance_Report.xlsx");
     });
 
     function showMessage(text, type) {
